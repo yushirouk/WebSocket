@@ -35,16 +35,19 @@ public class RedisTest {
         LocalDateTime refreshTime = LocalDateTime.of(2018, 5, 26, 0, 0);
         PassSession point = PassSession.builder()
                 .sessionId(id)
-                .updateYn(false)
+                .updateYn(true)
+                .serverNode("1")
                 .build();
         PassSession point2 = PassSession.builder()
                 .sessionId(id + "2")
                 .updateYn(false)
+                .serverNode("2")
                 .build();
         
         PassSession point3 = PassSession.builder()
                 .sessionId(id + "3")
                 .updateYn(false)
+                .serverNode("1")
                 .build();
         //when
         pointRedisRepository.save(point);
@@ -54,9 +57,11 @@ public class RedisTest {
         //then
         PassSession savedPoint = pointRedisRepository.findById(id).get();
         assertEquals(savedPoint.getSessionId(), "jojoldu");
-        assertEquals(savedPoint.isUpdateYn(),false);
+        //assertEquals(savedPoint.isUpdateYn(),false);
         
-        
+        System.out.println(savedPoint.getSessionId());
+        System.out.println(savedPoint.isUpdateYn());
         System.out.println(pointRedisRepository.findByUpdateYn(false).size());
+        System.out.println(pointRedisRepository.findByUpdateYnAndServerNode(false, "1").size());
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.polling.core.handler.SocketHandler;
+import com.polling.persistence.dao.PassSessionRedisRepository;
+import com.polling.persistence.model.PassSession;
 
 @Service
 public class LongPollingEventSimulator {
@@ -25,63 +28,23 @@ public class LongPollingEventSimulator {
 	
 	@Autowired
 	SocketHandler handler;
+	
+	@Autowired
+    private PassSessionRedisRepository pointRedisRepository;
 
 	// 이벤트 발생시 call
 	public void simulateIncomingNotification(final String sessionId) {
-
-		//TODO REDIS에서 sessionId 정보를 찾는다. key: sessionId value: json nodeId, port
-		
-		
-		
-		//1번서버에서 발생한 요청이라고 가정...
-		String redisNodId = "server1";
-		String redisPort = "8090";
-
-//		// request가 발생한 서버에 이벤트발생을 알린다.
-//		if (nodeId.equals(redisNodId)) {
-//			// 현재 서버에서 받았다면 직접처리
-//			simulateOutgoingNotification(sessionId);
-//		} else {
-//			// 아닌경우 해당서버로 이벤트 발생전달.
-//			//simulateOutgoingNotification(sessionId);
-//			HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(); factory.setReadTimeout(5000); // 읽기시간초과, ms 
-//			factory.setConnectTimeout(3000); // 연결시간초과, ms 
-//			//factory.setHttpClient(httpClient); // 동기실행에 사용될 HttpClient 세팅 
-//			HttpClient httpClient = HttpClientBuilder.create().setMaxConnTotal(100) // connection pool 적용 
-//					.setMaxConnPerRoute(5) // connection pool 적용 
-//					.build(); factory.setHttpClient(httpClient); // 동기실행에 사용될 HttpClient 세팅
-//
-//			factory.setHttpClient(httpClient);
-//			
-//			RestTemplate restTemplate = new RestTemplate(factory);
-//			
-//			String [] tmp =  sessionId.split("_");
-//			
-//			String url = "http://localhost:" + redisPort + "/simulate/" + tmp[0] +"/" + tmp[1]; 
-//			String tmp2 = restTemplate.getForObject(url, String.class);
-//			System.out.println("전송했다...................." + tmp2);
-//		}
+		LOGGER.log(Level.INFO, "simulateIncomingNotification called");
+		//TODO redis update
+		PassSession passSessionUpdate = pointRedisRepository.findById(sessionId).get();
+		passSessionUpdate.setUpdateYn(true);
+		pointRedisRepository.save(passSessionUpdate);
+		LOGGER.log(Level.INFO, "simulateIncomingNotification end");
 	}
 	
-//	public void simulateOutgoingNotification(Iterable<PassSession> iterablePoint) {
-//		
-//		WebSocketSession wss = handler.getSessionMap().get(sessionId);
-//		
-//		while(iterablePoint.iterator().hasNext()) {
-//			
-//			
-//			handler.getSessionMap().containsKey(iterablePoint.iterator().next().getId());
-//			
-//			if(handler.getSessionMap().containsKey(iterablePoint.iterator().next().getId())) {
-//				
-//			}
-//		}
-//		
-//	}
-
 	// 이벤트 값을 클라이언트에게 전달.
 	public void simulateOutgoingNotification(ArrayList<String> sessionIds) {
-		System.out.println("simulateOutgoingNotification sessionId:" + sessionIds.size());
+		System.out.println("simulateOutgoingNotification sessionId.size():" + sessionIds.size());
 
 		sessionIds.stream().forEach((sessionId) -> 
 			{
