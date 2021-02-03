@@ -22,10 +22,10 @@ public class RedisRepositoryConfig {
 		return new LettuceConnectionFactory(redisHost, redisPort);
 	}
 
-	@Bean
-	public RedisTemplate<?, ?> redisTemplate() {
-		RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
-		redisTemplate.setConnectionFactory(redisConnectionFactory());
-		return redisTemplate;
-	}
+//	@Bean
+//	public RedisTemplate<?, ?> redisTemplate() {
+//		RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+//		redisTemplate.setConnectionFactory(redisConnectionFactory());
+//		return redisTemplate;
+//	}
 }

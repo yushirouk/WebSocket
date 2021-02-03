@@ -84,7 +84,7 @@ $(function (){
                         poll();
                     }
                     else {
-                    	$('.status').text("Http code:" + status);
+                    	$('.status').text("Http code:" + status + "재연결시도.");
                         poll();
                     }
                 },
