@@ -3,16 +3,27 @@ package com.polling.core.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
+
+import com.polling.persistence.dao.PassSessionRedisRepository;
+import com.polling.persistence.model.PassSession;
 
 import lombok.Getter;
 
 @Component
 @Getter
 public class SocketHandler extends AbstractWebSocketHandler {
+	
+	@Autowired
+	private PassSessionRedisRepository redisRepository;
+	
+	@Value("${server.nodeId}")
+	private String nodeId;
 
 	HashMap<String, WebSocketSession> sessionMap = new HashMap<>();
 
@@ -22,6 +33,10 @@ public class SocketHandler extends AbstractWebSocketHandler {
 
 		String userId = getId(session);
 		sessionMap.put(userId, session);
+		
+		//redis에 등록
+		redisRepository.save(PassSession.builder().sessionId(userId).serverNode(nodeId).updateYn(false).build());
+		
 		System.out.println("userId :" + userId);
 	}
 

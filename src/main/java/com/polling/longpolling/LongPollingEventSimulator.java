@@ -34,11 +34,14 @@ public class LongPollingEventSimulator {
 
 	// 이벤트 발생시 call
 	public void simulateIncomingNotification(final String sessionId) {
-		LOGGER.log(Level.INFO, "simulateIncomingNotification called");
+		LOGGER.log(Level.INFO, "simulateIncomingNotification called :" + sessionId);
+		
 		//TODO redis update
-		PassSession passSessionUpdate = pointRedisRepository.findById(sessionId).get();
-		passSessionUpdate.setUpdateYn(true);
-		pointRedisRepository.save(passSessionUpdate);
+		if(pointRedisRepository.findById(sessionId).isPresent()) {
+			PassSession passSessionUpdate = pointRedisRepository.findById(sessionId).get();
+			passSessionUpdate.setUpdateYn(true);
+			pointRedisRepository.save(passSessionUpdate);
+		}
 		LOGGER.log(Level.INFO, "simulateIncomingNotification end");
 	}
 	

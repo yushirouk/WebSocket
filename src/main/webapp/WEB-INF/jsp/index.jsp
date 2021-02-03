@@ -10,10 +10,10 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
 jQuery.fn.serializeObject = function() { 
-    var obj = null; 
+    const obj = null; 
     try { 
         if(this[0].tagName && this[0].tagName.toUpperCase() == "FORM" ) { 
-            var arr = this.serializeArray(); 
+            const arr = this.serializeArray(); 
             if(arr){ obj = {}; 
             jQuery.each(arr, function() { 
                 obj[this.name] = this.value; }); 
@@ -27,7 +27,11 @@ jQuery.fn.serializeObject = function() {
 
 $(function (){
 
-	var useWebSockets = false;
+	const useWebSockets = false;
+
+// 	if(!"WebSocket" in window){
+// 		useWebSockets = false;
+// 	}
 
     $( document ).ready( function() {
 
@@ -35,18 +39,25 @@ $(function (){
             event.preventDefault();
             
             if(useWebSockets) {
-                var wsUri = 'ws://localhost:8090/ws?txSeqNo=' + $('#txSeqNo').val() + "&cpCd=" + $('#cpCd').val();
-                var websocket = new WebSocket(wsUri);
+                const wsUri = 'ws://localhost:8090/ws?txSeqNo=' + $('#txSeqNo').val() + "&cpCd=" + $('#cpCd').val();
+                const websocket = new WebSocket(wsUri);
+
+                websocket.onopen = function (evt) {
+                    $('.type').text('웹소켓 연결됨.');
+                }
                 websocket.onerror = function (evt) {
                     useWebSockets = false;
                     // on WebSocket error, gracefully fall back to long polling strategy
                     console.log("WebSocket error, gracefully fall back to long polling strategy.");
                     poll();
-                };
+                }
                 websocket.onmessage = function(event){
             		//alert('통신사 응답 수신 완료! 결과:' + JSON.parse(event.data).statCd);
             		alert(event.data);
             		websocket.close();
+            	}
+            	websocket.onclose = function (evt){
+            		$('.type').text('웹소켓 종료됨.');
             	}
             } else {
                 console.log("Calling poll");
@@ -56,15 +67,16 @@ $(function (){
 
         /* 반복적으로 서버에 롱폴링을 요청한다.
          * - 서버에서 보낸 데이터가 없을 경우 1분마다 요청
-         * - immediately if data is received from the server;
          */
         function poll(){
+        	$('.type').text('롱폴링 시작됨.');
+            
             $.ajax({
                 url: "register/"+$('#cpCd').val() + "/" + $('#txSeqNo').val(),
                 success: function(data, status, jqXHR) {
 					alert(data);
                     //결과를 받았을 경우 그대로 종료
-                    //setTimeout( poll(dossierId), 10 );
+					$('.type').text('롱폴링 종료됨.');
                 },
                 error: function(jqXHR, status, errorThrown) {
                     if (status=='timeout') {
@@ -72,7 +84,7 @@ $(function (){
                         poll();
                     }
                     else {
-                        console.log("상태코드:" + status);
+                    	$('.status').text("Http code:" + status);
                         poll();
                     }
                 },
@@ -111,8 +123,8 @@ $(function (){
 	<p id="analytics" ></p>
 	
 		<p>연결방식</p>
-		<p class="sample"></p>
-		<p class="uuid"></p>
+		<p class="type"></p>
+		<p class="status"></p>
 	</div>
 	
 	<div class="btnArea double">
