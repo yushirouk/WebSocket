@@ -29,4 +29,10 @@ public class MainController {
 		
 		return "index";
 	}
+	
+		@GetMapping("/comm")
+		String comm() throws SQLException {
+			
+			return "comm";
+		}
 }

@@ -93,23 +93,6 @@ $(function (){
                 timeout: 60000
             });
         }
-
-         $( '.btn__event' ).click( function( event ) {
-             event.preventDefault();
-             simulate();
-         });
-         
-		//이벤트 발생
-        function simulate(){
-            $.ajax({
-                url: "simulate/" + $('#cpCd').val() + "/" + $('#txSeqNo').val(),
-                success: function(data, status, jqXHR) {
-                    console.log("Event simulated successfully.");
-                },
-                type:'POST'
-            });
-        }
-
     }); // (document).ready
 });
 </script>
@@ -117,8 +100,8 @@ $(function (){
 <body>
 	<div>
 	<form id="initForm" name="initForm" method="post" >
-		<input type="text" id="cpCd" name="cpCd" value="<c:out value="${initForm.cpCd}" />">
-		<input type="text" id="txSeqNo" name="txSeqNo" value="<c:out value="${initForm.txSeqNo}" />">
+		현재 접속자의 회원사코드  : <input type="text" id="cpCd" name="cpCd" value="<c:out value="${initForm.cpCd}" />"><br/>
+		현재 접속자의 거래일련번호: <input type="text" id="txSeqNo" name="txSeqNo" value="<c:out value="${initForm.txSeqNo}" />">
 	</form>
 	<p id="analytics" ></p>
 	
@@ -129,8 +112,6 @@ $(function (){
 	
 	<div class="btnArea double">
 		<button class="btn btn__start" >요청시작</button>
-<!-- 		<button class="btn btn__send" >send </button> -->
-		<button class="btn btn__event" >통신사이벤트 </button>
 	</div>
 </body>
 </html>
