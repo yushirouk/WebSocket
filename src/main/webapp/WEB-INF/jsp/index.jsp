@@ -27,11 +27,11 @@ jQuery.fn.serializeObject = function() {
 
 $(function (){
 
-	const useWebSockets = false;
+	const useWebSockets = true;
 
-// 	if(!"WebSocket" in window){
-// 		useWebSockets = false;
-// 	}
+	if(!"WebSocket" in window){
+		useWebSockets = false;
+	}
 
     $( document ).ready( function() {
 
