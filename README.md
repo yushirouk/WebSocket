@@ -3,7 +3,7 @@ WebSocket + redis
 
 1. 단독테스트 (본 프로젝트 내의 embedded redis사용)
   1) application-local.properties를 configuration으로 프로젝트 기동.
-  2) localhost:8090/ 접속 (다중접속테스트를 위해 2개이상을 띄워서 진행하는것을 권장)
+  2) http://localhost:8090/ 접속 (다중접속테스트를 위해 2개이상을 띄워서 진행하는것을 권장)
   3) '요청시작' 클릭시 브라우저 환경에 따라 Websocket또는 롱폴링 시작
   4) 별도의 창에서 http://localhost:8090/comm 접속
   5) 접속중인 사용자의 거래일련번호를 복사하여 통신사이벤트 거래일련번호에 입력 후 '통신사이벤트' 클릭.
