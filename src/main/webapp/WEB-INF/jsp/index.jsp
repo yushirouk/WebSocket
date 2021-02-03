@@ -128,7 +128,7 @@ $(function (){
 	</div>
 	
 	<div class="btnArea double">
-		<button class="btn btn__start" >폴링요청</button>
+		<button class="btn btn__start" >요청시작</button>
 <!-- 		<button class="btn btn__send" >send </button> -->
 		<button class="btn btn__event" >통신사이벤트 </button>
 	</div>
