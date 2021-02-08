@@ -1,4 +1,4 @@
-# WebSocket
+# WebSocket (none sock.js)
 WebSocket + redis + SpringBoot + gradle
 
  # 단독테스트 (본 프로젝트 내의 embedded redis사용)
