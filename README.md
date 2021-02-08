@@ -1,5 +1,5 @@
 # WebSocket (none sock.js)
-WebSocket + redis + SpringBoot + gradle
+WebSocket + long polling + redis + SpringBoot + gradle
 
  # 단독테스트 (본 프로젝트 내의 embedded redis사용)
   1) application-local.properties를 configuration으로 프로젝트 기동.
